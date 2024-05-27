@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+  <link rel="stylesheet" href="/styles.css"> <!-- Correct path to CSS file -->
+</head>
+<body>
+  <div class="board">
+    <div class="list">
+      <h1>To-Do</h1>
+      <form class="task-form" action="/add" method="POST">
+        <input type="text" name="task" placeholder="New Task" required>
+        <button type="submit">Add Task</button>
+      </form>
+      <ul id="task-list">
+        <% tasks.forEach((task, index) => { %>
+          <li class="<%= task.completed ? 'completed' : '' %>">
+            <form action="/complete" method="POST" style="display: inline;">
+              <input type="hidden" name="index" value="<%= index %>">
+              <button type="submit" class="complete"><%= task.completed ? 'Undo' : 'Complete' %></button>
+            </form>
+            <span><%= task.description %></span>
+            <form action="/delete" method="POST" style="display: inline;">
+              <input type="hidden" name="index" value="<%= index %>">
+              <button type="submit" class="delete">Delete</button>
+            </form>
+          </li>
+        <% }); %>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Include Sortable.js for drag-and-drop functionality -->
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
+  <script>
+    // Initialize Sortable for the task list
+    new Sortable(document.getElementById('task-list'), {
+      animation: 150,
+      ghostClass: 'sortable-ghost'
+    });
+  </script>
+</body>
+</html>
